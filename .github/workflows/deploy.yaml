@@ -3,10 +3,10 @@ name: Deploy AKS Addon (Manual)
 on:
   workflow_dispatch:
     inputs:
-      environment_name:
-        type: choice
-        required: true
-        options: [master]
+      # environment_name:
+      #   type: choice
+      #   required: true
+      #   options: [master]
       deploy_grafana:
         description: "Deploy / upgrade grafana chart?"
         required: true
