@@ -93,8 +93,11 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: azure/setup-kubectl@v4
-      - uses: azure/setup-helm@v4
+      - name: Setup kubectl and Helm    
+        uses: azure/setup-kubectl@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
 
       - name: Install kubelogin
         run: |
@@ -134,8 +137,8 @@ jobs:
         uses: cschleiden/replace-tokens@v1
         with:
           files: '["${{ steps.render.outputs.rendered_values }}"]'
-          tokenPrefix: "${{ inputs.token_prefix }}"
-          tokenSuffix: "${{ inputs.token_suffix }}"
+          tokenPrefix: "#{"
+          tokenSuffix: "}#"
 
       - name: Add Helm repo (optional)
         if: ${{ inputs.helm_repo_name != '' && inputs.helm_repo_url != '' }}
