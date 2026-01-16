@@ -65,7 +65,7 @@ on:
 
 jobs:
   deploy_addon:
-    runs-on: arc-aks-runners
+    runs-on: ${{ inputs.runs-on || 'ubuntu-latest' }}
 
     # Prod approval is enforced here via GitHub Environments settings
     environment:
