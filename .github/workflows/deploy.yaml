@@ -49,25 +49,25 @@ jobs:
 
 
 
-  deploy_prometheus:
-    name: Deploy prometheus
-    if: ${{ inputs.deploy_prometheus == true }}
-    uses: ./.github/workflows/addons-deployment.yaml
+  # deploy_prometheus:
+  #   name: Deploy prometheus
+  #   if: ${{ inputs.deploy_prometheus == true }}
+  #   uses: ./.github/workflows/addons-deployment.yaml
 
-    with:
-      environment_name: prod
-      aks_rg: test-rg
-      aks_cluster_name: test-aks
+  #   with:
+  #     environment_name: prod
+  #     aks_rg: test-rg
+  #     aks_cluster_name: test-aks
 
-      addon_name: prometheus
-      helm_namespace: monitoring
+  #     addon_name: prometheus
+  #     helm_namespace: monitoring
 
-      # Map addon -> chart/release/values/repo here
-      helm_release_name: prometheus
+  #     # Map addon -> chart/release/values/repo here
+  #     helm_release_name: prometheus
 
-      helm_values_file: ./aks-addons/prometheus/vars/override.yaml
+  #     helm_values_file: ./aks-addons/prometheus/vars/override.yaml
 
-    secrets:
-      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      token_env: ${{ secrets.TOKEN_ENV }}
-      helm_set_args: ${{ secrets.HELM_SET_ARGS }}
+  #   secrets:
+  #     AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+  #     token_env: ${{ secrets.TOKEN_ENV }}
+  #     helm_set_args: ${{ secrets.HELM_SET_ARGS }}
