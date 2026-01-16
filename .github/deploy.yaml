@@ -1,0 +1,42 @@
+name: Deploy AKS Addon (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment_name:
+        type: choice
+        required: true
+        options: [dev, qa, prod]
+      addon:
+        type: choice
+        required: true
+        options: [grafana, prometheus]
+      namespace:
+        required: true
+        default: observability
+
+jobs:
+  run:
+    uses: addons-deployment.yaml
+    with:
+      environment_name: ${{ inputs.environment_name }}
+      aks_rg: ${{ vars.AKS_RG }}
+      aks_cluster_name: ${{ vars.AKS_CLUSTER_NAME }}
+
+      addon_name: ${{ inputs.addon }}
+      helm_namespace: ${{ inputs.namespace }}
+
+      # Map addon -> chart/release/values/repo here
+      helm_release_name: ${{ inputs.addon }}
+
+      helm_values_file: addons/${{ inputs.addon }}/values-${{ inputs.environment_name }}.yaml
+
+      # Example charts (change as you like)
+      helm_chart: ${{ inputs.addon == 'grafana' && 'grafana/grafana' || 'prometheus-community/kube-prometheus-stack' }}
+      helm_repo_name: ${{ inputs.addon == 'grafana' && 'grafana' || 'prometheus-community' }}
+      helm_repo_url:  ${{ inputs.addon == 'grafana' && 'https://grafana.github.io/helm-charts' || 'https://prometheus-community.github.io/helm-charts' }}
+
+    secrets:
+      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      token_env: ${{ secrets.TOKEN_ENV }}
+      helm_set_args: ${{ secrets.HELM_SET_ARGS }}
