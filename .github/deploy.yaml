@@ -17,7 +17,7 @@ on:
 
 jobs:
   run:
-    uses: addons-deployment.yaml
+    uses: ./addons-deployment-template/.github/workflows/addons-deployment.yaml
     with:
       environment_name: ${{ inputs.environment_name }}
       aks_rg: ${{ vars.AKS_RG }}
