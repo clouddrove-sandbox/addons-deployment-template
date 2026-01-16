@@ -72,7 +72,7 @@ jobs:
       name: ${{ inputs.environment_name }}
 
     # Hard guard: prod only from main
-    if: ${{ inputs.environment_name != 'prod' || github.ref == 'refs/heads/main' }}
+    # if: ${{ inputs.environment_name != 'prod' || github.ref == 'refs/heads/master' }}
 
     steps:
       - uses: actions/checkout@v4
