@@ -6,7 +6,7 @@ on:
       environment_name:
         type: choice
         required: true
-        options: [dev, qa, prod]
+        options: [dev, qa, master]
       addon:
         type: choice
         required: true
