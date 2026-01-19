@@ -1,0 +1,49 @@
+name: Release Charts
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - 'charts/helmchart/Chart.yaml'
+
+
+jobs:
+  release:
+    permissions:
+      contents: write # to push chart release and create a release (helm/chart-releaser-action)
+      packages: write # needed for ghcr access
+      id-token: write # needed for keyless signing
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: latest   
+
+      - name: Helm package
+        uses: stefanprodan/helm-gh-pages@master
+        with:
+          token: ${{ secrets.GITHUB }}
+          charts_url: https://charts.clouddrove.com/
+          charts_dir: ./charts
+          # branch: master
+          target_dir: ./charts
+          index_dir: .
+       
+      - name: Releasing tags and publishing charts
+        uses: helm/chart-releaser-action@v1.7.0
+        with:
+          charts_dir: charts
+          charts_repo_url: https://charts.clouddrove.com/
+          mark_as_latest: true
+          skip_existing: true
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB }}"
