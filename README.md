@@ -1,7 +1,3 @@
-Here’s a **ready-to-use `README.md`** you can place next to your shared workflow.
-It explains what the template does and how other workflows can call it.
-
----
 
 # Shared AKS Addon Helm Deployment Template
 
@@ -220,24 +216,6 @@ This allows you to:
 
 ---
 
-## 🧪 Recommended repository structure
-
-```text
-.
-├── .github/workflows/
-│   ├── addons-deployment.yaml   # shared template
-│   └── deploy-addons.yaml       # caller workflow
-├── aks-addons/
-│   ├── grafana/
-│   │   ├── Chart.yaml
-│   │   └── vars/override.yaml
-│   └── prometheus/
-│       ├── Chart.yaml
-│       └── vars/override.yaml
-```
-
----
-
 ## ✅ Best practices
 
 * Keep **secrets only in GitHub Secrets**, never in values files.
@@ -258,8 +236,3 @@ This shared workflow gives you:
   * **Platform logic** (template workflow)
   * **Addon configuration** (calling workflows)
 * Easy extension for new addons by just adding another job that calls the template.
-
-If you want, I can now:
-
-* Turn this into a downloadable `README.md` file, or
-* Add diagrams showing the workflow call flow.

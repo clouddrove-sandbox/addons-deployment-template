@@ -1,0 +1,459 @@
+# Default values for helmchart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Create deployment.yaml by default.
+deployment:
+  enabled: true
+
+replicaCount: 1
+  # -- Replica count used to configure the number of replica pods that should be deployed and maintained.
+
+deploymentStrategy: {}
+  # -- Defines how updates to the Deployment are rolled out.
+  # type: RollingUpdate
+  # rollingUpdate:
+  #   maxSurge: 25%
+  #   maxUnavailable: 25%
+
+image:
+    # -- Image to use for deploying, must support an entrypoint which creates users/databases from appropriate config files
+    # -- The container image repository that should be used.  E.g 'nginx', 'gcr.io/kubernetes-helm/tiller'.
+  repository: nginx
+    # -- The image pull policy to employ. Determines when the image will be pulled in. If undefined, this will default to 'IfNotPresent'.
+  pullPolicy: IfNotPresent
+      # -- Overrides the image tag whose default is the chart version.
+  tag: "latest"
+      # -- Specify digest of image. Tags can be overriden but each tag will contain different digest than previous.
+  digest: ""
+
+imagePullSecrets: [] 
+  # -- imagePullSecrets lists the Secret resources that should be used for accessing private registries.
+
+commands: []
+  # - /bin/sh
+  # - -c
+  # - echo "Hello, from CloudDrove!"
+
+secret:
+  enabled: false
+  existingSecretName: ""
+  secrets: {}
+    # KEY: "value"
+
+configmap:
+  enabled: false
+  configs: {}
+    # KEY: "value"
+
+nameOverride: "" 
+
+fullnameOverride: "" 
+  # -- fullnameOverride is a string that allows overriding the default fullname that appears as the application name and is used as the application name by kubernetes.
+
+pdbMinAvailable: ""
+  # -- minPodsAvailable specifies the minimum number of pods that should be available at any given point in time.
+
+podAnnotations: {} 
+  # -- podAnnotations will add the provided map to the annotations for the Pod resource created by the Deployment.
+
+podSecurityContext: {} 
+  # -- podSecurityContext holds pod-level security access control settings.
+
+securityContext: {}
+      # -- securityContext is a map  that specified the privilege and access control settings for a Pod of Container. Security Context can be specified when the application requires additional access control permissions. securityContext takes precedence over podSecurityContext    
+
+resource: 
+  enabled: false
+resources: {}
+  # -- Requests and Limits to be specified for each pod.
+  # limits: 
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests: 
+  #   cpu: 100m
+  #   memory: 128Mi
+
+healthCheckProbes:
+  # -- liveness and readiness probes in deployment
+  enabled: false
+  probes: {}
+    # livenessProbe:
+    #   enabled: true
+    #   httpGet:
+    #     path: /healthz
+    #     port: http
+    #   initialDelaySeconds: 10
+    #   periodSeconds: 10
+    #   timeoutSeconds: 2
+    #   failureThreshold: 3
+    #   successThreshold: 1
+    #
+    # readinessProbe:
+    #   enabled: true
+    #   httpGet:
+    #     path: /readyz
+    #     port: http
+    #   initialDelaySeconds: 5
+    #   periodSeconds: 5
+    #   timeoutSeconds: 2
+    #   failureThreshold: 3
+    #   successThreshold: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  behavior:
+    enabled: false
+    # config:
+    #   scaleDown:
+    #     stabilizationWindowSeconds: 300
+    #     policies:
+    #       - type: Percent
+    #         value: 50
+    #         periodSeconds: 60
+    #   scaleUp:
+    #     stabilizationWindowSeconds: 0
+    #     policies:
+    #       - type: Percent
+    #         value: 100
+    #         periodSeconds: 15
+    #       - type: Pods
+    #         value: 2
+    #         periodSeconds: 15
+    #     selectPolicy: Max
+
+poddisruptionbudget:
+  enabled: false
+  # minAvailable: 1
+
+nodeSelector: {}
+    # -- nodeSelector specify restrictions on what node this pod should be scheduled on.
+
+tolerations: []
+    # -- tolerations can be used to allow the pod to be scheduled on nodes with a specific taint.
+
+affinity: {} 
+  # -- affinity specify restrictions on what node this pod should be scheduled on.
+
+volume:
+  enabled: false
+  # -- Volume mounted to pods either as default or in the form of PVC
+  # name: "test"
+  # mountPath: ""
+  # -- Path inside container where pvc will be mounted
+  # hostPath: ""
+  # -- Path inside node which will be used as pvc
+  volumeMounts: []
+  # Example:
+  # volumeMounts:
+  #   - name: app-data
+  #     mountPath: /app
+  #   - name: logs
+  #     mountPath: /var/log/app
+  volumes: []
+  # Example:
+  # volumes:
+  #   - name: app-data
+  #     persistentVolumeClaim:
+  #       claimName: app-data-pvc
+  #   - name: logs
+  #     emptyDir: {}
+
+
+storageClass:
+  enabled: false
+  # -- Whether to create a custom Storage Class
+  # existingClaim: ""
+  # -- Use existing PVC by mentioning name of PVC
+  # storageClassName: ""
+  # -- Override name of storage-class
+
+  aws: false
+  # -- PVC configurations for AWS Cloud Provider
+  # awsProvisioningMode: "efs-ap"
+  # -- AWS provisioning mode
+  # fileSystemId: ""
+  # -- AWS EFS FileSystemId
+  # directoryPerms: "700"
+  # -- AWS directory permissions
+
+  azure: false
+  # -- PVC configurations for Azure Cloud Provider
+  # azureSku: "Premium_LRS"
+  # -- Azure storage SKU
+
+  gcp: false
+  # -- PVC configurations for GCP Cloud Provider
+  # gcpType: "standard"
+  # -- GCP storage type
+  # provisioner: ""
+  # -- Provisioner as per the Cloud Provider
+
+  # allowVolumeExpansion: false
+  # -- Allow volume expansion
+  # volumeBindingMode: Immediate
+  # -- Volume binding mode
+  # mountOptions: ["debug"]
+  # -- Options for mounting volume
+
+  persistence:
+    enabled: false
+    # -- Enable persistent volume
+    # accessMode: ReadWriteOnce
+    # -- Mode of access this persistent volume
+    # size: 512Mi
+    # -- Requested storage size
+    # persistentVolumeReclaimPolicy: ""
+    # -- Reclaim Policy for Persistent Volume
+
+statefulset:
+  enabled: false
+    # -- Set to true to deploy a StatefulSet instead of a Deployment
+  image:
+    repository: ""
+      # -- Container image repository
+    tag: ""
+      # -- Container image tag
+    pullPolicy: ""
+      # -- Image pull policy
+  secret:
+    enabled: false
+      # -- Secrets to mount into StatefulSet
+    existingSecretName: ""
+    secrets: {}
+  configmap:
+    enabled: false
+      # -- ConfigMaps to mount into StatefulSet
+    existingConfigMapName: ""
+    configs: {}
+  volume:
+    enabled: false
+      # -- Volumes for StatefulSet pods
+    name: ""
+    mountPath: ""
+    hostPath: ""
+    type: DirectoryOrCreate
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    readOnly: false
+  ports: []
+    # -- Container ports
+  nodeSelector: {}
+    # -- Node selector for scheduling
+  securityContext: {}
+    # -- Security context for StatefulSet pods
+  resources:
+    enabled: false
+      # -- Resource requests/limits for StatefulSet pods
+  extraLabels: {}
+    # -- Extra labels to attach to StatefulSet pods
+
+daemonset:
+  enabled: false
+    # -- Set to true to deploy a DaemonSet
+  image: {}
+    # -- DaemonSet image repository/pullPolicy/tag/digest
+  secret:
+    enabled: false
+      # -- Secrets to mount into DaemonSet pods
+    existingSecretName: ""
+    secrets: {}
+  configmap:
+    enabled: false
+      # -- ConfigMaps to mount into DaemonSet pods
+    existingConfigMapName: ""
+    configs: {}
+  volume:
+    enabled: false
+      # -- Volumes for DaemonSet pods
+    name: ""
+    type: DirectoryOrCreate
+    mountPath: ""
+    hostPath: ""
+    readOnly: false
+  ports: []
+    # -- Ports exposed by DaemonSet container
+  securityContext: {}
+    # -- Security context for DaemonSet pods
+  resource:
+    enabled: false
+  # -- Resource requests/limits for DaemonSet pods
+  # resources:
+  #   limits:
+  #     cpu: 200m
+  #     memory: 256Mi
+  #   requests:
+  #     cpu: 100m
+  #     memory: 128Mi
+  nodeSelector: {}
+    # -- Node selector for scheduling DaemonSet pods
+  extraLabels: {}
+    # -- Extra labels for DaemonSet pods
+
+serviceAccount:
+  enabled: false
+    # -- Specifies whether a service account should be created
+  annotations: {}
+    # -- Annotations to add to the service account
+  name: ""
+    # -- Name of the service account to use
+  automountServiceAccountToken: false
+    # -- Enable/disable automounting of service account token
+
+service: 
+  enabled: true
+    # -- Specifies whether a service should be created
+  headless: false
+    # -- Headless service
+  type: ClusterIP 
+    # -- The Service type
+  port: 80  
+    # -- Port on which the service is exposed
+  containerPort: ""
+    # -- Port on which container accepts traffic
+  targetPort: ""
+    # -- Target port of the pod
+  protocol: TCP
+    # -- Protocol for service port
+  annotations: {}
+    # service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    # service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+  ports: []
+  # ports:
+  #   - name: http
+  #     port: 3000
+  #     targetPort: http
+  #     protocol: TCP
+  #   - name: health
+  #     port: 3001
+  #     targetPort: health
+
+istio:
+  enabled: false
+    # -- Whether Istio resources should be created
+  virtualService:
+    enabled: false
+      # -- Create virtual service if Istio enabled
+    hosts: []
+  gateway:
+    names: []
+      # -- Names of Istio gateways
+
+ingress:    
+  enabled: false 
+    # -- Create ingress resource
+  className: ""
+    # -- Ingress class
+  annotations: {}
+    # -- Annotations for ingress
+  hosts: []
+    # -- Hosts to route
+  tls: []
+    # -- TLS configuration
+
+cronJob: 
+  # -- Determines if the `cronJob` resource should be deployed as part of the helm release.
+  enabled: false
+  # -- Cron job schedule.
+  schedule: ""
+  # -- Cron Job startingDeadlineSeconds
+  startingDeadlineSeconds: 3600
+  # -- CronJob's concurrencyPolicy
+  concurrencyPolicy: Forbid
+  # -- ConnJob's failed history limit
+  failedJobsHistoryLimit: 3
+  # -- CPU/Memory resource requests/limits for CronJob
+  resources: {}
+  image:
+    # -- Cron Job's image repository
+    repository: nginx
+    # -- Cron Job's image pullPolicy
+    pullPolicy: IfNotPresent
+    # -- Cron Job's image tag
+    # Overrides the image tag whose default is the chart version.
+    tag: "1.16.0" 
+  imagePullSecrets: [] 
+    # - name: docker-secret
+  secret:
+    # -- Turn on and off secrets for CronJob resource.
+    enabled: false
+  configmap:
+    # -- Turn on and off configmap for CronJob resource.
+    enabled: false
+
+metrics:
+  enabled: false   
+    # -- Whether metrics endpoint should be exposed
+  portName: "prometheus" 
+    # -- Name of metrics port
+  port: 3001     
+    # -- Port number for metrics
+  targetPort: 3001 
+    # -- Target port for metrics
+
+rbac:
+  enabled: false
+    # -- Enable RBAC resources
+  role:
+    enabled: false
+    rules: []
+  roleBinding:
+    enabled: false
+    users:
+      enabled: false 
+      list: []
+    groups:
+      enabled: false
+      list: []
+  clusterRole:
+    enabled: false 
+    rules: []
+  clusterRoleBinding:
+    enabled: false
+    users:
+      enabled: false
+      list: []
+    groups:
+      enabled: false
+      list: []
+
+ingressClass:
+  enabled: false
+    # -- Create an IngressClass resource
+  controller: ""
+    # -- Controller identifier
+  annotations: {}
+    # -- Annotations for IngressClass
+
+vpa:
+  enabled: false
+    # -- Enable Vertical Pod Autoscaler
+  targetKind: Deployment
+    # -- Target kind (Deployment/StatefulSet/DaemonSet)
+  containerName: "*"
+    # -- Container name to apply VPA
+  updateMode: "Auto"
+    # -- Update mode
+  controlledResources: ["cpu", "memory"]
+    # -- List of controlled resources
+  minAllowed:
+    cpu: 100m
+    memory: 128Mi
+  maxAllowed:
+    cpu: 2
+    memory: 2Gi
+  controlledValues: ""
+    # -- Control values: RequestsOnly | RequestsAndLimits
+
+networkPolicy:
+  enabled: false
+    # -- Enable network policies
+  policyTypes: []
+    # -- Ingress/Egress
+  ingress: []
+    # -- Ingress rules
+  egress: []
+    # -- Egress rules

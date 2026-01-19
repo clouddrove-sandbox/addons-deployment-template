@@ -1,0 +1,23 @@
+{{- if .Values.storageClass.enabled }}
+apiVersion: {{ .Values.storageClass.apiVersion | default "storage.k8s.io/v1" }}
+kind: StorageClass
+metadata:
+  name: {{ default (include "helmchart.fullname" .) .Values.storageClass.storageClassName }}
+provisioner: {{ .Values.storageClass.provisioner | default "k8s.io/minikube-hostpath" }}
+{{- if .Values.storageClass.aws }}
+parameters:
+  provisioningMode: {{ .Values.storageClass.awsProvisioningMode | default "efs-ap" }}
+  fileSystemId: {{ .Values.storageClass.fileSystemId }}
+  directoryPerms: {{ .Values.storageClass.directoryPerms | default "700" }}
+{{- else if .Values.storageClass.azure }}
+parameters:
+  skuName: {{ .Values.storageClass.azureSku | default "Premium_LRS" }}
+{{- else if .Values.storageClass.gcp }}
+parameters:
+  type: {{ .Values.storageClass.gcpType | default "standard" }}
+{{- end }}
+reclaimPolicy: {{ .Values.storageClass.persistence.persistentVolumeReclaimPolicy | default "Retain" }}
+allowVolumeExpansion: {{ .Values.storageClass.allowVolumeExpansion | default false }}
+mountOptions: {{ toYaml (default (list "debug") .Values.storageClass.mountOptions) | nindent 2 }}
+volumeBindingMode: {{ .Values.storageClass.volumeBindingMode | default "Immediate" }}
+{{- end }}
